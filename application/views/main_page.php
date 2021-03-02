@@ -28,11 +28,11 @@ use Model\User_model;
         <li class="nav-item">
             <?  if (User_model::is_logged()) {?>
               <a href="/main_page/logout" class="btn btn-primary my-2 my-sm-0"
-                 data-target="#loginModal">Log out, <?= $user->personaname?>
+                 data-target="#loginModal">Log out <?= $user->personaname?>
               </a>
             <? } else {?>
               <button type="button" class="btn btn-success my-2 my-sm-0" type="submit" data-toggle="modal"
-                      data-target="#loginModal">Log IN
+                      data-target="#loginModal">Log In
               </button>
             <? } ?>
         </li>
@@ -98,14 +98,14 @@ use Model\User_model;
           </div>
         </div>
       </div>
-      If You need some help about core - read README.MD in system folder
-      <br>
-      What we have done All posts: <a href="/main_page/get_all_posts">/main_page/get_all_posts</a> One post: <a
-          href="/main_page/get_post/1">/main_page/get_post/1</a>
-      <br>
-      Just go coding Login: <a href="/main_page/login">/main_page/login</a> Make boosterpack feature <a
-          href="/main_page/buy_boosterpack">/main_page/buy_boosterpack</a> Add money feature <a
-          href="/main_page/add_money">/main_page/add_money</a>
+<!--      If You need some help about core - read README.MD in system folder-->
+<!--      <br>-->
+<!--      What we have done All posts: <a href="/main_page/get_all_posts">/main_page/get_all_posts</a> One post: <a-->
+<!--          href="/main_page/get_post/1">/main_page/get_post/1</a>-->
+<!--      <br>-->
+<!--      Just go coding Login: <a href="/main_page/login">/main_page/login</a> Make boosterpack feature <a-->
+<!--          href="/main_page/buy_boosterpack">/main_page/buy_boosterpack</a> Add money feature <a-->
+<!--          href="/main_page/add_money">/main_page/add_money</a>-->
     </div>
   </div>
 

@@ -3,7 +3,7 @@
 namespace Model;
 use App;
 use CI_Model;
-use CriticalException;
+use Exception;
 
 class Login_model extends CI_Model {
 
@@ -24,6 +24,19 @@ class Login_model extends CI_Model {
         $user->is_loaded(TRUE);
 
         App::get_ci()->session->set_userdata('id', $user->get_id());
+    }
+
+    public static function login($login, $password): User_model
+    {
+        $user = User_model::find_user_by_email($login);
+
+        if ($user->get_password() !== $password) {
+            throw new Exception('Auth failed');
+        }
+
+        self::start_session($user);
+
+        return $user;
     }
 
 
