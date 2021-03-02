@@ -65,7 +65,7 @@ class Main_page extends MY_Controller
         $data = json_decode(file_get_contents('php://input'));
 
         $post_id = intval($data->id);
-        $message = $data->commentText;
+        $message = $data->text;
 
         if (empty($post_id) || empty($message)){
             return $this->response_error(CI_Core::RESPONSE_GENERIC_WRONG_PARAMS);
