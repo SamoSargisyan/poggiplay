@@ -5,3 +5,4 @@
 application/cache/*
 #/application/config/development/*
 
+docker/mysql/data

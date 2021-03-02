@@ -117,8 +117,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `email`, `password`, `personaname`, `avatarfull`, `rights`, `wallet_balance`, `wallet_total_refilled`, `wallet_total_withdrawn`, `time_created`) VALUES
-(1, 'admin@niceadminmail.pl', NULL, 'AdminProGod', 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/96/967871835afdb29f131325125d4395d55386c07a_full.jpg', 0, '0.00', '0.00', '0.00', '2019-07-26 01:53:54'),
-(2, 'simpleuser@niceadminmail.pl', NULL, 'simpleuser', 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/86/86a0c845038332896455a566a1f805660a13609b_full.jpg', 0, '0.00', '0.00', '0.00', '2019-07-26 01:53:54');
+(1, 'admin@niceadminmail.pl', 'admin', 'AdminProGod', 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/96/967871835afdb29f131325125d4395d55386c07a_full.jpg', 0, '0.00', '0.00', '0.00', '2019-07-26 01:53:54'),
+(2, 'simpleuser@niceadminmail.pl', 'simpleuser', 'simpleuser', 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/86/86a0c845038332896455a566a1f805660a13609b_full.jpg', 0, '0.00', '0.00', '0.00', '2019-07-26 01:53:54');
 
 --
 -- Indexes for dumped tables

@@ -84,24 +84,38 @@ class Main_page extends MY_Controller
     }
 
 
-    public function login($user_id)
+    public function login()
     {
-        // Right now for tests we use from contriller
+        // Right now for tests we use from controller
+        // это с формы получаем данные
         $login = App::get_ci()->input->post('login');
         $password = App::get_ci()->input->post('password');
+
+        // But data from modal window sent by POST request.  App::get_ci()->input...  to get it.
+        // функцию поиска вынесли в другой класс, что б не захламлять логику
 
         if (empty($login) || empty($password)){
             return $this->response_error(CI_Core::RESPONSE_GENERIC_WRONG_PARAMS);
         }
 
-        // But data from modal window sent by POST request.  App::get_ci()->input...  to get it.
-
-
         //Todo: 1 st task - Authorisation.
 
-        Login_model::start_session($user_id);
+        // а здесь проверяем с бд
+        try {
+            $user = Login_model::login($login, $password);
 
-        return $this->response_success(['user' => $user_id]);
+        // если введенный пароль не соответствует паролю с бд - будет ошибка
+            if ($user->get_password() !== $password) {
+                return $this->response_error('Auth failed');
+            }
+
+        } catch (EmeraldModelNoDataException $e){
+            return $this->response_error(CI_Core::RESPONSE_GENERIC_NO_DATA);
+        }
+
+        // можно было и обойтись, но раз уже есть такой метод, то воспользуемся
+        Login_model::start_session($user);
+        return $this->response_success(['user' => $user->get_id()]);
     }
 
 

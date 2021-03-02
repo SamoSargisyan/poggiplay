@@ -5,6 +5,7 @@ namespace Model;
 use App;
 use CI_Emerald_Model;
 use Exception;
+use http\Exception\RuntimeException;
 use stdClass;
 
 /**
@@ -380,6 +381,25 @@ class User_model extends CI_Emerald_Model {
         }
 
         return $o;
+    }
+
+    public static function find_user_by_email($email): User_model
+    {
+        /**
+         * что то вроде квери билдера в ларе, только там используется модель вместо App->ci
+         */
+        $user = App::get_ci()->s->from(self::CLASS_TABLE)
+            ->where(['email' => $email])
+            ->orderBy('id', 'ASC')
+            ->one();
+
+        // если не нашел - напиши " не нашел "
+        if (!$user) {
+            throw new RuntimeException('user not found', 404);
+        }
+
+        // нашел - верни юзера
+        return new User_model($user);
     }
 
 }
