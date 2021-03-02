@@ -1,9 +1,9 @@
 <?php
 
 namespace Model;
+
 use App;
 use CI_Emerald_Model;
-use Comment_model;
 use Exception;
 use stdClass;
 
@@ -202,8 +202,17 @@ class Post_model extends CI_Emerald_Model {
         return (App::get_ci()->s->get_affected_rows() > 0);
     }
 
-    public function comment(){
+    public function comment($user_id, $post_id, $message, $parent_id = 0){
+        App::get_ci()->s->from(Comment_model::CLASS_TABLE)
+            ->insert([
+                'user_id' => $user_id,
+                'assign_id' => $post_id,
+                'text' => $message,
+                'parent_id' => $parent_id
+            ])
+            ->execute();
 
+        return new static(App::get_ci()->s->get_insert_id());
     }
 
     /**
