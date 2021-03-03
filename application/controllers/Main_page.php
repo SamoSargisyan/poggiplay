@@ -1,5 +1,6 @@
 <?php
 
+use Model\Like_model;
 use Model\Login_model;
 use Model\Post_model;
 use Model\User_model;
@@ -83,7 +84,6 @@ class Main_page extends MY_Controller
         return $this->response_success(['post' => $posts]);
     }
 
-
     public function login()
     {
         // Right now for tests we use from controller
@@ -136,9 +136,32 @@ class Main_page extends MY_Controller
     }
 
 
-    public function like(){
-        // todo: 3rd task add like post\comment logic
-        return $this->response_success(['likes' => rand(1,55)]); // Колво лайков под постом \ комментарием чтобы обновить . Сейчас рандомная заглушка
+    public function like ($post_id)
+    {
+        if (!User_model::is_logged()) {
+            return $this->response_error(CI_Core::RESPONSE_GENERIC_NEED_AUTH);
+        }
+        if (empty($type) || is_null($post_id) || !intval($post_id)) {
+            return $this->response_error(CI_Core::RESPONSE_GENERIC_WRONG_PARAMS);
+        }
+
+        $object = null;
+
+        if (!Post_model::exists($post_id)) {
+            return $this->response_error(CI_Core::RESPONSE_GENERIC_NO_DATA);
+        } else {
+            $object = new Post_model($post_id);
+        }
+
+        Like_model::create([
+            'user_id' => User_model::get_session_id(),
+            'post_id' => $post_id
+        ]);
+        $object->reload();
+
+        return $this->response_success([
+            'likes' => $object->get_likes_count(),
+        ]);
     }
 
 }

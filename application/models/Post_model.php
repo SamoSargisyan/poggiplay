@@ -6,6 +6,7 @@ use App;
 use CI_Emerald_Model;
 use Exception;
 use stdClass;
+use Model\Like_model;
 
 /**
  * Created by PhpStorm.
@@ -34,6 +35,15 @@ class Post_model extends CI_Emerald_Model {
     protected $likes;
     protected $user;
 
+    protected $likes_count;
+
+    public static function exists($id) {
+        $count = App::get_ci()->s
+            ->from(self::CLASS_TABLE)
+            ->where('id', intval($id))
+            ->count();
+        return ($count > 0);
+    }
 
     /**
      * @return int
@@ -134,10 +144,39 @@ class Post_model extends CI_Emerald_Model {
     // generated
 
     /**
+     * @return int
+     */
+    public function get_likes_count(): int
+    {
+        if (empty($this->likes_count)) {
+            $this->likes_count = Like_model::get_count_by_post_id($this->id);
+        }
+        return $this->likes_count;
+    }
+
+    /**
+     * @param int $likes_count
+     *
+     * @return bool
+     */
+    public function set_likes_count(int $likes_count)
+    {
+        $this->likes_count = $likes_count;
+        return $this->save('likes_count', $likes_count);
+    }
+
+    /**
      * @return mixed
      */
     public function get_likes()
     {
+        if (empty($this->likes)) {
+            try {
+                $this->likes = Like_model::get_all_by_post_id($this->id);
+            } catch (\Exception $e) {
+                $this->likes = [];
+            }
+        }
         return $this->likes;
     }
 
@@ -176,7 +215,7 @@ class Post_model extends CI_Emerald_Model {
         return $this->user;
     }
 
-    function __construct($id = NULL)
+    function __construct(?int $id = NULL)
     {
         parent::__construct();
         $this->set_id($id);
@@ -258,8 +297,7 @@ class Post_model extends CI_Emerald_Model {
     {
         $ret = [];
 
-        foreach ($data as $d)
-        {
+        foreach ($data as $d){
             $o = new stdClass();
 
             $o->id = $d->get_id();
@@ -267,7 +305,7 @@ class Post_model extends CI_Emerald_Model {
 
             $o->text = $d->get_text();
 
-            $o->user = User_model::preparation($d->get_user(), 'main_page');
+            $o->user = User_model::preparation($d->get_user(),'main_page');
 
             $o->time_created = $d->get_time_created();
             $o->time_updated = $d->get_time_updated();
@@ -288,18 +326,13 @@ class Post_model extends CI_Emerald_Model {
     {
         $o = new stdClass();
 
-
         $o->id = $data->get_id();
         $o->img = $data->get_img();
 
+        $o->user = User_model::preparation($data->get_user(),'main_page');
+        $o->comments = Comment_model::preparation($data->get_comments(),'full_info');
 
-//            var_dump($d->get_user()->object_beautify()); die();
-
-        $o->user = User_model::preparation($data->get_user(), 'main_page');
-        $o->comments = Comment_model::preparation($data->get_comments(), 'full_info');
-
-        $o->likes = rand(0, 25);
-
+        $o->likes = $data->get_likes_count();
 
         $o->time_created = $data->get_time_created();
         $o->time_updated = $data->get_time_updated();
